@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/javapostest"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/opt/javax-usb/lib/jsr80.jar"/>
+	<classpathentry kind="lib" path="/opt/javax-usb/lib/jsr80_ri.jar"/>
+	<classpathentry kind="lib" path="/opt/javax-usb/lib/jsr80_linux.jar"/>
+	<classpathentry kind="lib" path="/opt/tgcs/javapos/rxtx/jars/RXTXcomm.jar"/>
+	<classpathentry kind="lib" path="/opt/tgcs/javapos/lib/aiptrccfg.jar"/>
+	<classpathentry kind="lib" path="/opt/tgcs/javapos/lib/jpos114.jar"/>
+	<classpathentry kind="lib" path="/opt/tgcs/javapos/lib/jpos_sysmgmt.jar"/>
+	<classpathentry kind="lib" path="/opt/tgcs/javapos/lib/tgcsjavapos.jar"/>
+	<classpathentry kind="lib" path="/opt/tgcs/javapos/lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="/opt/tgcs/javapos/lib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="/opt/tgcs/javapos/etc"/>
+	<classpathentry kind="lib" path="/opt/tgcs/javapos/lib"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

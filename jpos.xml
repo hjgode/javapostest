@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JposEntries>
+<!--Saved by JavaPOS jpos.config/loader (JCL) version 2.3.0-RC3 on 4/5/23, 3:52 PM-->
+    
+    <JposEntry logicalName="ToneIndicator1">
+        <creation factoryClass="com.ibm.jpos.services.IBMJposServiceInstanceFactory" serviceClass="com.ibm.jpos.services.IBMToneIndicator"/>
+        <vendor name="Toshiba" url="http://www.toshibagcs.com"/>
+        <jpos category="ToneIndicator" version="v1.14.11L32 2022-12-09"/>
+        <product description="ToneIndicator" name="ToneIndicator" url="http://www.toshibagcs.com"/>
+
+        <!--Other non JavaPOS required property (mostly vendor properties and bus specific properties i.e. RS232 )-->
+        <prop name="com.ibm.posj.bus.hid.usageId" type="String" value="0x3500"/>
+        <prop name="deviceBus" type="String" value="HID"/>
+        <prop name="abstractionClass" type="String" value="com.ibm.jpos.services.IBMToneIndicator"/>
+        <prop name="impClass" type="String" value="com.ibm.jpos.services.sdi.ToneIndicatorServiceImp"/>
+        <prop name="com.ibm.posj.bus.hid.usagePage" type="String" value="0xff45"/>
+        <prop name="com.ibm.jpos.tools.autoconfig.devcat.DevCatAutoConfig.devCatNumber" type="String" value="1"/>
+        <prop name="com.ibm.posj.bus.deviceNumber" type="String" value="0"/>
+</JposEntry>
+    
+    
+    <JposEntry logicalName="POSPrinter1">
+        <creation factoryClass="com.ibm.jpos.services.IBMJposServiceInstanceFactory" serviceClass="com.ibm.jpos.services.SdiIBM4610EPOSPrinter"/>
+        <vendor name="Toshiba" url="http://www.toshibagcs.com"/>
+        <jpos category="POSPrinter" version="v1.14.11L32 2022-12-09"/>
+        <product description="POSPrinter" name="POSPrinter" url="http://www.toshibagcs.com"/>
+
+        <!--Other non JavaPOS required property (mostly vendor properties and bus specific properties i.e. RS232 )-->
+        <prop name="com.ibm.posj.bus.hid.usagePage" type="String" value="0xff45"/>
+        <prop name="abstractionClass" type="String" value="com.ibm.jpos.services.SdiIBM4610EPOSPrinter"/>
+        <prop name="SureOneVersion" type="String" value="standard"/>
+        <prop name="impClass" type="String" value="com.ibm.jpos.services.sdi.IBM4610PrinterServiceImp"/>
+        <prop name="com.ibm.jpos.tools.autoconfig.devcat.DevCatAutoConfig.devCatNumber" type="String" value="1"/>
+        <prop name="deviceBus" type="String" value="HID"/>
+        <prop name="com.ibm.posj.bus.hid.usageId" type="String" value="0x3500"/>
+        <prop name="com.ibm.posj.bus.deviceNumber" type="String" value="0"/>
+</JposEntry>
+    
+</JposEntries>

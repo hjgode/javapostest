@@ -7,6 +7,9 @@ import jpos.events.StatusUpdateEvent;
 import jpos.events.StatusUpdateListener;
 import jpos.util.JposPropertiesConst;
 
+import java.io.Console;
+import java.io.File;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
@@ -21,6 +24,7 @@ import jpos.*;
 public class test implements jpos.events.ErrorListener, StatusListener, StatusUpdateListener, DirectIOListener{
 
 	static jpos.POSPrinter prt;
+	static myPrinter mPrinter=null;
 	private static final int receipt = POSPrinterConst.PTR_S_RECEIPT;
 	  
 	private static final int[] SET_UPOS_MODE = { 0 };
@@ -33,6 +37,9 @@ public class test implements jpos.events.ErrorListener, StatusListener, StatusUp
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {
+			sysprint(dumpClassPath());
+			sysprint("#############################"); //System.exit(-1);
+			
 			test myTest=new test();
 //			System.setProperty("jpos.config.populatorFile", "jposxml.cfg");  
 //			System.setProperty("jpos.util.tracing.TurnOnNamedTracers", "JposServiceLoader,SimpleEntryRegistry,SimpleRegPopulator,XercesRegPopulator");  
@@ -43,16 +50,69 @@ public class test implements jpos.events.ErrorListener, StatusListener, StatusUp
 			//jpos.loader.simple.SimpleServiceManager loader= new jpos.loader.simple.SimpleServiceManager();
 //			jpos.config.simple.xml.XercesRegPopulator loader = new jpos.config.simple.xml.XercesRegPopulator();
 //			loader.load("/opt/tgcs/javapos/config/jpos.xml");
+			
+			//#################################
+			
+			/*
+			myPrinter mPrinter = new myPrinter("POSPrinter1");
+			mPrinter.claim();			
+			mPrinter.enable();
+			mPrinter.printCAPs();
+			mPrinter.printDemo();
+			mPrinter.setFactoryDefaults();
+			System.exit(-2);
+			*/
+			
+			//#################################
+			
+			mPrinter = null;
+			java.util.Scanner sc = new java.util.Scanner(System.in);
+			int i = -1; String inp = Integer.toString(i);
+			while(true) {
+					printMenu();
+					System.out.print("Input: ");
+	//				i = sc.nextInt();
+	//				inp = Integer.toString(i);
+					inp = sc.nextLine();
+					if (inp.equals("1"))
+						mPrinter=new myPrinter("POSPrinter1");
+					else if (inp.equals("2"))
+						mPrinter.claim();
+					else if (inp.equals("3"))
+						mPrinter.enable();
+					else if (inp.equals("4"))
+						mPrinter.printCAPs();
+					else if (inp.equals("5"))
+						if (mPrinter.getIsEnabled())
+							mPrinter.printReceipt();
+						else
+							sysprint("Printer not enabled");
+					else if (inp.equals("6"))
+						mPrinter.setFactoryDefaults();
+					else if (inp.equals("a"))
+						mPrinter.printLogoByNo(i);
+					else if (inp.equals("7"))
+						mPrinter.disable();
+					else if (inp.equals("8"))
+						mPrinter.release();
+					else if (inp.equals("9"))
+						mPrinter.close();
+					else if (inp.equals("0"))
+						System.exit(0);
+			}
+/*			
 			sysprint("START: new POSPrinter()...");
+			
+			// Init printer
 			POSPrinter prt=new POSPrinter();
 			prt.addErrorListener(myTest);
 			prt.addStatusUpdateListener(myTest);
+			
 			sysprint("open...");
 			prt.open("POSPrinter1");
 			sysprint("asyncMode = false...");
 			prt.setAsyncMode(false);
-//			sysprint("close...");
-//			prt.close();
+
 			sysprint("claim...");
 			prt.claim(1000);
 			sysprint("setDeviceEnabled...true");
@@ -79,14 +139,48 @@ public class test implements jpos.events.ErrorListener, StatusListener, StatusUp
 			
 			sysprint("close...");
 			prt.close();
+*/			
 			
-			
-		}catch(Exception ex) {
+		}catch(JposException ex) {
 			ex.printStackTrace();
 			System.out.println(ex.getMessage());
+			
+		}
+		catch(Exception ex) {
+			ex.printStackTrace();
+			System.out.println(ex.getMessage());
+			
 		}
 		sysprint("END");
 		System.exit(0);
+	}
+	
+	public static void printMenu() {
+		String o="null", c="            ", e="---------";
+		if(mPrinter != null) {
+			o=mPrinter.getIsOpen() ? "open":"close";
+			c=mPrinter.getIsClaimed() ? "is claimed  ": 
+				                        "not claimed ";
+			e=mPrinter.getIsEnabled() ? "enabled  ":
+				                        "disabled ";
+		}
+		String s = "+--------------------------------------+\n";
+		s+=        "| [1] open printer                     |\n";
+		s+=        "| [2] claim printer                    |\n";
+		s+=        "| [3] enable printer                   |\n";
+		s+=        "| [4] show DevCAPs                     |\n";
+		s+=        "| [5] print Demo                       |\n";
+		s+=        "| [a] print Logo                       |\n";
+		s+=        "| [6] reset to Factory defaults        |\n";
+		s+=        "| [7] disable printer                  |\n";
+		s+=        "| [8] release printer                  |\n";
+		s+=        "| [9] close printer                    |\n";
+		s+=        "| [0] exit                             |\n";
+		s+=        "+--------------------------------------+\n";
+		//          | open is claimed__ enabled__          |
+		s+=        "| "+o+" "+c+" "+e+"" + "          |\n";
+		s+=        "+--------------------------------------+\n";
+		sysprint(s);
 	}
 	
 	public static void sysprint(String s) {
@@ -437,5 +531,13 @@ public class test implements jpos.events.ErrorListener, StatusListener, StatusUp
 		}
 	}
 	//##############################################################
-   
+    public static String dumpClassPath() {
+    	String s="";
+        String classpath = System.getProperty("java.class.path");
+        String[] classPathValues = classpath.split(File.pathSeparator);
+        for (String classPath: classPathValues) {
+            s += classPath + "\n"; // System.out.println(classPath);
+        }
+        return s;
+    }
 }

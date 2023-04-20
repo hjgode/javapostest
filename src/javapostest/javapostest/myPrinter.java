@@ -37,6 +37,21 @@ public class myPrinter implements ErrorListener, OutputCompleteListener, StatusU
 		return _posPrinter;
 	}
 	
+	boolean _isOpen=false;
+	public boolean getIsOpen() {
+		return _isOpen;
+	}
+	
+	boolean _isClaimed=false;
+	public boolean getIsClaimed() {
+		return _isClaimed;
+	}
+	
+	boolean _isEnabled=false;
+	public boolean getIsEnabled() {
+		return _isEnabled;
+	}
+	
 	public myPrinter(String sPrinter) throws Exception{
 		_posPrinter=getInstance();
 		try {
@@ -44,7 +59,8 @@ public class myPrinter implements ErrorListener, OutputCompleteListener, StatusU
 			_posPrinter.open(sPrinter);
 			sysprint("asyncMode = false...");
 			_posPrinter.setAsyncMode(false);
-		}catch (Exception ex) {
+			_isOpen=true;
+		}catch (Exception ex) {			
 			throw ex;
 		}
 	}
@@ -59,6 +75,7 @@ public class myPrinter implements ErrorListener, OutputCompleteListener, StatusU
 			_posPrinter.addOutputCompleteListener(this);
 			sysprint("claim...");
 			_posPrinter.claim(1000);
+			_isClaimed=true;
 		}catch(Exception ex)
 		{
 			throw ex;
@@ -75,6 +92,7 @@ public class myPrinter implements ErrorListener, OutputCompleteListener, StatusU
 			_posPrinter.removeOutputCompleteListener(this);
 			sysprint("release...");
 			_posPrinter.release();
+			_isClaimed=true;
 		}catch(Exception ex)
 		{
 			throw ex;
@@ -86,6 +104,7 @@ public class myPrinter implements ErrorListener, OutputCompleteListener, StatusU
 		try {
 		sysprint("setDeviceEnabled...true");
 		_posPrinter.setDeviceEnabled(true);
+		_isEnabled=true;
 		}catch(Exception ex)
 		{
 			throw ex;
@@ -98,6 +117,7 @@ public class myPrinter implements ErrorListener, OutputCompleteListener, StatusU
 		try {
 		sysprint("close...");
 		_posPrinter.close();
+		_isOpen=false;
 		}catch(Exception ex)
 		{
 			throw ex;
@@ -110,6 +130,7 @@ public class myPrinter implements ErrorListener, OutputCompleteListener, StatusU
 		try {
 		sysprint("setDeviceEnabled...false");
 		_posPrinter.setDeviceEnabled(false);
+		_isEnabled=false;
 		}catch(Exception ex)
 		{
 			throw ex;
@@ -181,7 +202,11 @@ public class myPrinter implements ErrorListener, OutputCompleteListener, StatusU
 
 	}
 	
-	public void printDemo() throws Exception{
+	public void printReceipt() throws Exception{
+		if (! _isEnabled) {
+			sysprint("printer not enabled");
+			return;
+		}
 		try {
 			POSPrinter ptr=getInstance();
 	        ptr.setAsyncMode(false);
@@ -238,6 +263,8 @@ public class myPrinter implements ErrorListener, OutputCompleteListener, StatusU
 		sendDirectIOCommand(ptr /* getPrinter() */, arrayOfByte);
 		sysprint("setUPOSMode...");
 		setUPOSMode(ptr);// getPrinter());
+		_isClaimed=false;
+		_isEnabled=false;
 		}catch(Exception ex) {
 			throw ex;
 		}
@@ -400,6 +427,73 @@ public class myPrinter implements ErrorListener, OutputCompleteListener, StatusU
 		sysprint("outputCompleteOccurred: " + arg0.toString());
 		
 	}
+	
+	public void printLogoByNo(int n) {
+		if (! _isEnabled) {
+			sysprint("printer not enabled");
+			return;
+		}
+		try {
+			POSPrinter ptr=getInstance();
+	        ptr.setAsyncMode(false);
+	        ptr.setRecLineChars(32);
+	        int width = ptr.getRecLineWidth()/2;
+	        ptr.transactionPrint(receipt,POSPrinterConst.PTR_TP_TRANSACTION);
+	        ptr.printNormal(receipt,"\u001b|1B"); //LOGO 1 ?????
+	        //ptr.printNormal(receipt,"\u001b|N\u001b|bC\u001b|3C\u001b|cATICKET STORE\n");
+	        //ptr.printNormal(receipt, "X'1D2F;00;1'\n"); // 00 is density=normal, 1 is logo number
+	        // or use GS | m logo#, "\u001D|001"
+	        //ptr.printNormal(receipt,"\u001b|N\u001b|bC\u001b|3C\u001b|cATICKET STORE\n");
+	        //ptr.printNormal(receipt, "\u001D|001"); // 00 is density=normal, 1 is logo number
+	        //ptr.printNormal(receipt,"\u001b|95fP");
+	        ptr.transactionPrint(receipt,POSPrinterConst.PTR_TP_NORMAL);
+		}catch (Exception ex) {
+			sysprint(ex.getMessage());
+		}
+	}
+	void myprintLogo(int paramInt1, int paramInt2, int paramInt3) throws JposException {
+		try {
+			int[] arrayOfInt = { paramInt2 };
+			int i = 120;
+			DirectIOBitmapInfo localDirectIOBitmapInfo = new DirectIOBitmapInfo(paramInt1, "", i, paramInt3);
+			//sendDirectIOCommand(2, arrayOfInt, localDirectIOBitmapInfo);
+			getInstance().directIO(2, null, localDirectIOBitmapInfo);
+		} catch (JposException ex) {
+			sysprint(ex.getMessage());
+			throw ex;
+		} catch (Exception ex) {
+			sysprint(ex.getMessage());
+			throw ex;
+		}
+	}
+
+	public void printLogo(int idx)  {
+		int i = idx == 0 ? 2 : 4;
+		String align = "Center"; //"Left"
+		int j = align.equals("Center") ? 1 : align.equals("Left") ? 0 : 2;
+	    try
+	    {
+	      myprintLogo(i, idx + 1, j);
+	    }
+	    catch (JposException localJposException1)
+	    {
+	      sysprint(localJposException1.getMessage());
+	      return;
+	    }
+	    try
+	    {
+	      if (i == 4)
+	      {
+	        getInstance().beginRemoval(5000);
+	        getInstance().endRemoval();
+	      }
+	    }
+	    catch (JposException localJposException2)
+	    {
+	      localJposException2.printStackTrace();
+	    }
+	}
+	
 	public static void sysprint(String s) {
 		System.out.println(s);
 	}

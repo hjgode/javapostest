@@ -97,6 +97,14 @@ public class test implements jpos.events.ErrorListener, StatusListener, StatusUp
 						mPrinter.release();
 					else if (inp.equals("9"))
 						mPrinter.close();
+					else if (inp.equals("R")) {
+						mPrinter=new myPrinter("POSPrinter1");
+						mPrinter.claim();
+						mPrinter.enable();
+						mPrinter.setFactoryDefaults();
+						mPrinter.release();
+						mPrinter.close();		
+						}				
 					else if (inp.equals("0"))
 						System.exit(0);
 			}
@@ -175,6 +183,7 @@ public class test implements jpos.events.ErrorListener, StatusListener, StatusUp
 		s+=        "| [7] disable printer                  |\n";
 		s+=        "| [8] release printer                  |\n";
 		s+=        "| [9] close printer                    |\n";
+		s+=        "| [R] RESET printer to Factory in all  |\n";
 		s+=        "| [0] exit                             |\n";
 		s+=        "+--------------------------------------+\n";
 		//          | open is claimed__ enabled__          |

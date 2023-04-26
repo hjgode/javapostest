@@ -11,12 +11,11 @@
 	<classpathentry kind="lib" path="/opt/javax-usb/lib/jsr80_linux.jar"/>
 	<classpathentry kind="lib" path="/opt/tgcs/javapos/rxtx/jars/RXTXcomm.jar"/>
 	<classpathentry kind="lib" path="/opt/tgcs/javapos/lib/aiptrccfg.jar"/>
-	<classpathentry kind="lib" path="/opt/tgcs/javapos/lib/jpos114.jar"/>
 	<classpathentry kind="lib" path="/opt/tgcs/javapos/lib/jpos_sysmgmt.jar"/>
 	<classpathentry kind="lib" path="/opt/tgcs/javapos/lib/tgcsjavapos.jar"/>
 	<classpathentry kind="lib" path="/opt/tgcs/javapos/lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="/opt/tgcs/javapos/lib/xml-apis.jar"/>
-	<classpathentry kind="lib" path="/opt/tgcs/javapos/etc"/>
-	<classpathentry kind="lib" path="/opt/tgcs/javapos/lib"/>
+	<classpathentry kind="lib" path="/opt/tgcs/javapos"/>
+	<classpathentry kind="lib" path="/opt/tgcs/javapos/lib/jpos114.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
